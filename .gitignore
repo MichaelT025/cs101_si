@@ -1,0 +1,38 @@
+# OS artifacts
+.DS_Store
+Thumbs.db
+Desktop.ini
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Editor/IDE artifacts
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vim/
+*.swp
+*.swo
+
+
+# C/C++
+*.o
+*.a
+*.so
+*.out
+*.obj
+
+# Build artifacts
+*.exe
+*.dll
+*.dylib
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+.DS_Store
+
+
