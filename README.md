@@ -15,9 +15,39 @@ CS101 covers foundational computer science concepts, including:
 
 ## Repository Structure
 
-- `Labs/`: Lab assignments and solutions. Organized by lab number (e.g., `Labs/Lab04/`).
-- `Projects/`: Project specifications, starter code, and grading rubrics. Organized by project (e.g., `Projects/p01/`).
-- Additional folders added as the course evolves.
+```
+cs101_si/
+├── Labs/                           # Lab assignments and solutions
+│   ├── Lab04/                      # Wavefront pathfinding algorithm
+│   │   ├── main.cpp
+│   │   ├── map1.txt
+│   │   ├── map2.txt
+│   │   └── ...
+│   └── Lab05/                      # Binary Search Tree (BST)
+│       ├── BinaryTree.java         # BST template
+│       ├── BinaryTree_s.java       # BST implementation with insert/find
+│       ├── Main.java               # Test cases
+│       ├── Node.java               # Tree node class
+│       └── req.md                  # Lab requirements
+│
+├── Projects/                       # Project specifications and code
+│   └── p01/                        # Infix to RPN converter
+│       ├── main.cpp
+│       ├── main2.cpp
+│       └── mainT.cpp
+│
+├── sessions/                       # SI session reference materials
+│   ├── basics/                     # Fundamental concepts
+│   │   └── classes.cpp             # C++ classes starter
+│   └── sorting/                    # Sorting algorithms
+│       └── quicksort.cpp           # Quicksort implementation
+│
+├── Some_java/                      # Java reference code
+│   └── helloworld.java
+│
+├── .gitignore                      # Git ignore rules
+└── README.md                       # This file
+```
 
 ### Recent Additions
 - **Lab 04:** Implementation of the Wavefront pathfinding algorithm.

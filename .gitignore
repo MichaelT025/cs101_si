@@ -24,6 +24,10 @@ Thumbs.db
 *.out
 *.obj
 
+#Java
+*.class
+*.jar
+
 # Build artifacts
 *.exe
 *.dll
