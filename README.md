@@ -36,6 +36,13 @@ cs101_si/
 │       ├── main2.cpp
 │       └── mainT.cpp
 │
+├── Sorting_Algorithms/             # Various sorting algorithm implementations
+│   ├── Bubblesort.cpp
+│   ├── insertionsort.cpp
+│   ├── mergesort.cpp
+│   ├── qsort.cpp
+│   └── selectionsort.cpp
+│
 ├── sessions/                       # SI session reference materials
 │   ├── basics/                     # Fundamental concepts
 │   │   └── classes.cpp             # C++ classes starter
