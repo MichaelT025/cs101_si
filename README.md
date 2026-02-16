@@ -35,6 +35,11 @@ cs101_si/
 │       ├── main.cpp
 │       ├── main2.cpp
 │       └── mainT.cpp
+│   └── p02/                        # Contact list 
+│       ├── ContactInfo.h
+│       ├── ContactInfo.cpp
+│       ├── main.cpp
+│       └── requirements.md
 │
 ├── Sorting_Algorithms/             # Various sorting algorithm implementations
 │   ├── Bubblesort.cpp
@@ -59,6 +64,7 @@ cs101_si/
 ### Recent Additions
 - **Lab 04:** Implementation of the Wavefront pathfinding algorithm.
 - **Project 01:** Infix to Reverse Polish Notation (RPN) converter and evaluator.
+- **Project 02:** Linked-list based contact manager with ordered insert, removal, printing, and deep-copy operations.
 
 ### Example: Running Lab Code
 ```bash
