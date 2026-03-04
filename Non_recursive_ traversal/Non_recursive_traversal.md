@@ -7,6 +7,7 @@
 - visit right subtree
 
 ### Pseudocode
+
 ```cpp
 inorder(root):
     stack = empty stack
@@ -23,10 +24,10 @@ inorder(root):
             //then go to right child
             curr = curr.right
 ```
+
 - keep pushing left children until you hit null
 - then pop and visit
 - then go to right child
-
 
 ## Preorder Traversal
 
@@ -35,6 +36,7 @@ inorder(root):
 - visit right subtree
 
 ### Pseudocode
+
 ```cpp
 preorder(root):
     stack = empty stack
@@ -51,11 +53,12 @@ preorder(root):
         if curr.left is not null:
             stack.push(curr.left)
 ```
+
 - push root to stack
 - while stack is not empty:
-  - pop from stack and visit
-  - push right child first, then left child
-  - push left last so that it's popped first
+    - pop from stack and visit
+    - push right child first, then left child
+    - push left last so that it's popped first
 
 ## Postorder Traversal
 
@@ -64,6 +67,7 @@ preorder(root):
 - visit root
 
 ### Pseudocode
+
 ```cpp
 postorder(root):
     stack = empty stack
@@ -94,42 +98,12 @@ postorder(root):
 - if no, pop and visit
 - then go to right child
 
-
-## Postorder Traversal (Alternative)
-
-- visit left subtree
-- visit right subtree
-- visit root
-
-### Pseudocode
-```cpp
-postorder(root):
-    stack = empty stack
-    stack.push(root)
-    
-    while stack is not empty:
-        //pop from stack and visit
-        curr = pop from stack
-        visit curr
-        //push left first since we want to pop it last
-        if curr.left is not null:
-            stack.push(curr.left) 
-        //push right last since we want to pop it first
-        if curr.right is not null:
-            stack.push(curr.right)
-```
-- push root to stack
-- while stack is not empty:
-  - pop from stack and visit
-  - push left child first, then right child
-  - push right last so that it's popped first
-
-
 ## Level Order Traversal
 
 - visit nodes level by level from left to right
 
 ### Pseudocode
+
 ```cpp
 levelOrder(root):
     queue = empty queue
@@ -146,10 +120,9 @@ levelOrder(root):
         if curr.right is not null:
             queue.enqueue(curr.right)
 ```
+
 - enqueue root to queue
 - while queue is not empty:
-  - dequeue and visit
-  - enqueue left child first, then right child
-  - enqueue right last so that it's dequeued last
-
-
+    - dequeue and visit
+    - enqueue left child first, then right child
+    - enqueue right last so that it's dequeued last
