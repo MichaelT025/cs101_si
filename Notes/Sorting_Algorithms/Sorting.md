@@ -1,0 +1,280 @@
+# Comparison Based Sorts
+
+
+## Bubble Sort
+
+- repeatedly steps through the array, compares adjacent elements and swaps them if they are in the wrong order
+- larger elements "bubble up" to the end of the array
+
+### Pseudocode
+
+```cpp
+
+bubbleSort(array A){
+  for(int i=0;i<A.size()-1;i++){
+    bool swapped=false;
+    for(int j=0;j<A.size()-i-1;j++){
+      if(A[j]>A[j+1]){
+        swap(A[j],A[j+1]);
+        swapped=true;
+      }
+    }
+    if(!swapped) break; // array is already sorted
+  }
+}
+
+```
+
+Average Case: O(n^2)
+
+Best Case: O(n) when the array is already sorted
+
+Worst Case: O(n^2) when the array is sorted in reverse order
+
+Space Complexity: O(1) In place
+
+Stable: Yes
+
+
+## Selection Sort
+
+- works by repeatedly finding the minimum element from the unsorted part and putting it at the beginning
+- maintains two subarrays: sorted and unsorted
+
+### Pseudocode
+
+```cpp
+
+selectionSort(array A){
+  for(int i=0;i<A.size()-1;i++){
+    int min_idx=i;
+    for(int j=i+1;j<A.size();j++){
+      if(A[j]<A[min_idx]){
+        min_idx=j;
+      }
+    }
+    swap(A[i],A[min_idx]);
+  }
+}
+
+```
+
+Average Case: O(n^2)
+
+Best Case: O(n^2) still need to scan entire unsorted portion
+
+Worst Case: O(n^2)
+
+Space Complexity: O(1) In place
+
+Stable: No (can be made stable with modifications)
+
+
+## Insertion Sort
+
+- works by building the final sorted array one item at a time
+- gets a key and compares it to the items in the array then inserts it in the correct position
+
+
+
+### Pseudocode
+
+```cpp
+
+insertionSort(array A){
+  for(int i=1;i<A.size();i++){
+    int key=A[i]
+    int j=i-1;
+    while(j>=0 && A[j]>key){
+      A[j+1]=A[j]
+      j--;
+    }
+    A[j+1]=key;
+  }
+}
+
+```
+
+Average Case: O(n^2)
+
+Best Case: O(n)  when the array is already sorted
+
+Worst Case: O(n^2) when the array is sorted in reverse order
+
+Space Complexity: O(1) In place
+
+Stable: Yes
+
+## Merge Sort
+
+- divide and conquer algorithm
+- divide the array into two halves
+- sort each half recursively
+- merge the two halves
+
+### Pseudocode
+
+```cpp
+
+
+
+merge(array A, int lo, int mid, int hi){
+    int L=mid-lo+1;
+    int R=hi-mid;
+    array left[L];
+    array right[R];
+    for(int i=lo to mid){
+      left[i-lo]=A[i];
+    }
+    for(int i=mid+1 to hi){
+      right[i-mid-1]=A[i];
+    }
+    int leftp=0;
+    int rightp=0;
+    int mergep=lo;
+    while(leftp<=L && rigthp<=R){
+      if(left[leftp]<=right[rightp]){
+       A[mergep]=left[leftp];
+       leftp++;
+      }
+      else{
+        A[mergep]=right[rightp];
+        rigthp++;
+      }
+      mergep++;
+    }
+    while(leftp<L){
+      A[mergep]=left[leftp];
+      leftp++;
+      mergep++;
+    }    
+    while(rightp<R){
+      A[mergep]=right[rightp];
+      rightp++;
+      mergep++;
+    }    
+}
+
+
+mergeSort(array A,int lo, int hi){
+    if(hi<=lo) return;
+    int mid=lo+(hi-lo)/2;
+    mergeSort(A,lo,mid);
+    mergeSort(A,mid+1,hi);
+    merge(A,lo,mid,hi);
+}
+```
+
+Average Case: O(nlogn)
+
+Best Case: O(nlogn)
+
+Worst Case: O(nlogn)
+
+Space Complexity: O(n) Not in place
+
+Stable: Yes
+
+## Quick Sort
+
+- also divide and conquer
+- divide the array by partitioning it into two subarrays
+- after one pass the pivot is in the correct position
+- items to its left are all smaller, items to its right are all larger
+- sort the two subarrays recursively
+
+### Pseudocode
+
+```cpp
+
+partition(array A, int low, int high){
+  int pivot=A[high];
+  int i=low-1;
+  for(int j=low to high-1){
+    if(A[j]<=pivot){
+      i++;
+      swap(A[i],A[j]);
+    }
+  }
+  i++;
+  swap(A[i],A[high]);
+  return i;
+}
+
+quicksort(array A, int low, int high){
+    if(low<high){
+        q=partition(A,low,high)
+        quicksort(A,low,q-1)
+        quicksort(A,q+1,high)
+    }
+}
+
+```
+
+Average Case: O(nlogn)
+
+Best Case: O(nlogn)
+
+Worst Case: O(n^2) unbalanced partitioning (when the array is sorted or reverse sorted)
+
+Space Complexity: O(logn) Not in place <- successive function calls on the call stack
+
+Stable: No
+
+## Heap Sort
+
+- works by building a max heap from the array
+- then reccursively swaps the root with the last element and fixes the heap (extract_max)
+
+### Pseudocode
+
+```cpp
+
+heapify(Array A, int i){
+	//index of children
+  int lc=2*i+1;
+  int rc=2*i+2;
+  int largest=i;
+	//check for the largest value 
+  if(lc<A.size()&&A[lc]>A[largest])
+    largest=lc;
+  if(rc<A.size()&&A[rc]>A[largest])
+    largest=rc;
+	//swap the node with the largest child
+  if(largest!=i){
+    swap(A[i],A[largest]);
+	//fix the remaining heap
+    heapify(A,largest);
+  }
+}
+
+
+buildmaxheap(array A){
+		//start at lowest non-leaf node
+    for(int i=A.size()/2;i>=0;i--){
+        maxheapify(A,i)
+    }
+}
+heapsort(array A){
+		//first build the heap
+    buildmaxheap(A)
+		//extract max
+    for(int i=A.size()-1;i>0;i--){
+				//swap the root(A[0]) with the last element
+        swap(A[0],A[i])
+				//fix the remaining heap
+        heapify(A,0)
+    }
+}
+
+```
+
+Average Case: O(nlogn)
+
+Best Case: O(nlogn)
+
+Worst Case: O(nlogn)
+
+Space Complexity: O(1) In place
+
+Stable: No
