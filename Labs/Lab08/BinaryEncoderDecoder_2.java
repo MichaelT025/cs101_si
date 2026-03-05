@@ -1,8 +1,7 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
 
 /**
  * Provides methods to encode a string to a binary file and decode it back
@@ -17,38 +16,6 @@ public class BinaryEncoderDecoder_2 {
      * @param filename the output file name
      * @throws IOException if file writing fails
      */
-    public static void encodeStringToBinaryFile(String message, String filename) throws IOException {
-        LinkedHashMap<Character, Integer> charIndex=new LinkedHashMap<>();
-        //map characters to indices
-        int idx=0;
-        for(int i=0;i<message.length();i++){
-            char c=message.charAt(i);
-            //if char not in map, add it
-            if(!charIndex.containsKey(c)){
-                charIndex.put(c, idx);
-                idx++;
-            }
-        }
-        int uniqueChars = charIndex.size();
-        byte[] output = new byte[uniqueChars + message.length() + 1];
-        output[0] = (byte) uniqueChars;
-        
-        //read in unique chars into output array
-        int itt=1;
-        for(char c:charIndex.keySet()){
-            output[itt++]=(byte)c;
-        }
-
-        //read in indices into output array
-        for(int i=0;i<message.length();i++){
-            int index= charIndex.get(message.charAt(i));
-            output[itt++]=(byte) index;
-        }
-
-        try (FileOutputStream fos = new FileOutputStream(filename)) {
-            fos.write(output);
-        }
-    }
 
     /**
      * Decodes a string from a binary file encoded with the specified format.
@@ -87,7 +54,7 @@ public class BinaryEncoderDecoder_2 {
         }
         return out.toString();
     }
-    public static void encodeStringToBinaryFile_alt(String message, String filename) throws IOException {
+    public static void encodeStringToBinaryFile(String message, String filename) throws IOException {
         byte[] char_seen= new byte[128];
         int uniqueCount=0;
         byte[] indexes= new byte[message.length()];
