@@ -1,6 +1,5 @@
 # Comparison Based Sorts
 
-
 ## Bubble Sort
 
 - repeatedly steps through the array, compares adjacent elements and swaps them if they are in the wrong order
@@ -35,7 +34,6 @@ Space Complexity: O(1) In place
 
 Stable: Yes
 
-
 ## Selection Sort
 
 - works by repeatedly finding the minimum element from the unsorted part and putting it at the beginning
@@ -69,13 +67,10 @@ Space Complexity: O(1) In place
 
 Stable: No (can be made stable with modifications)
 
-
 ## Insertion Sort
 
 - works by building the final sorted array one item at a time
 - gets a key and compares it to the items in the array then inserts it in the correct position
-
-
 
 ### Pseudocode
 
@@ -251,8 +246,9 @@ heapify(Array A, int i){
 
 buildmaxheap(array A){
 		//start at lowest non-leaf node
+		//bottom up method
     for(int i=A.size()/2;i>=0;i--){
-        maxheapify(A,i)
+        heapify(A,i)
     }
 }
 heapsort(array A){
@@ -275,6 +271,6 @@ Best Case: O(nlogn)
 
 Worst Case: O(nlogn)
 
-Space Complexity: O(1) In place
+ In place
 
 Stable: No
