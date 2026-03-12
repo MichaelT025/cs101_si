@@ -16,8 +16,9 @@ public class PriorityQueue {
     }
 
     public HuffmanNode extractMin() {
+        if(isEmpty()) return null;
         HuffmanNode min = heap.get(0);
-        swap(heap.get(0), heap.get(heap.size() - 1));
+        swap(0, heap.size() - 1);
         heap.remove(heap.size() - 1);
         heapifyDown(0);
         return min;
@@ -41,7 +42,7 @@ public class PriorityQueue {
             smallest=r;
         }
         if(smallest!=index){
-            swap(heap.get(smallest), heap.get(index));
+            swap(smallest, index);
             heapifyDown(smallest);
         }
     }
@@ -50,7 +51,7 @@ public class PriorityQueue {
         if(index==0) return;
         int parent=(index-1)/2;
         if(compare(heap.get(index), heap.get(parent))<0){
-            swap(heap.get(index), heap.get(parent));
+            swap(index, parent);
             heapifyUp(parent);
         }
     }
@@ -67,11 +68,10 @@ public class PriorityQueue {
         return 1;
     }
 
-    private void swap(HuffmanNode one, HuffmanNode two){
-        int temp= one.frequency;
-        one.frequency=two.frequency;
-        two.frequency=temp;
-        
+    private void swap(int indexA, int indexB){
+        HuffmanNode temp = heap.get(indexA);
+        heap.set(indexA, heap.get(indexB));
+        heap.set(indexB, temp);
     }
     // You may add private helper methods for heapify and comparison if needed
 }
