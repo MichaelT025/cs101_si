@@ -22,7 +22,7 @@ cd cs101_si
 | Folder | Contents |
 |--------|----------|
 | `Labs/` | Lab assignments and solutions (Lab04, Lab05, Lab07, Lab08) |
-| `Projects/` | Project reference code (p01, p02) |
+| `Projects/` | Project reference code (p01, p02, p03) |
 | `Notes/` | Course notes and reference materials |
 | `sessions/` | SI session examples and practice problems |
 | `Some_java/` | Additional Java examples |
@@ -53,6 +53,13 @@ java Main
 cd Projects/p01
 g++ -o p01 main.cpp
 ./p01
+```
+
+**Project 03 - Huffman Encoding/Decoding:**
+```bash
+cd Projects/p03
+javac Main.java HuffmanCoding.java HuffmanNode.java PriorityQueue.java
+java Main
 ```
 
 **Project 02 - Contact List:**
@@ -148,7 +155,11 @@ cs101_si/
 │   └── Lab08/              # Binary Encoder/Decoder (Java)
 ├── Projects/
 │   ├── p01/                # Infix to RPN converter (C++)
-│   └── p02/                # Contact list (C++)
+│   │   └── Solution/
+│   ├── p02/                # Contact list (C++)
+│   │   └── Solution/
+│   └── p03/                # Huffman Encoding/Decoding (Java)
+│       └── Solution/
 ├── Notes/                  # Reference materials
 ├── sessions/               # SI session code
 └── Some_java/              # Extra Java examples
