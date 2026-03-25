@@ -2,23 +2,18 @@
 #include <fstream>
 #include <vector>
 
-#include <unordered_set>
-
 using namespace std;
 class HuffNode {
 public:
     int val;
     HuffNode *left;
     HuffNode *right;
-    HuffNode(int v, HuffNode *l = nullptr, HuffNode *r = nullptr) {
+    HuffNode(int v = 0, HuffNode *l = nullptr, HuffNode *r = nullptr) {
         val = v;
         left = l;
         right = r;
     }
 };
-
-vector<int> split_inord(const vector<int> &inorder, int l, int r);
-vector<int> split_level(const vector<int> &levelorder, const vector<int> &inorder);
 
 //TODO: All you have to do is build the tree ... complete this function
 HuffNode *createTreeFromInAndLevel(const vector<int> &inorder, const vector<int> &levelorder) {
@@ -26,52 +21,7 @@ HuffNode *createTreeFromInAndLevel(const vector<int> &inorder, const vector<int>
     //level order gives you the root
     //inorder gives you left/right of root
     //construct vectors for left / right and recursively build the tree
-
-    if (inorder.empty() || levelorder.empty()) {
-        return nullptr;
-    }
-
-    HuffNode *root = new HuffNode(levelorder[0]);
-    int r = 0;
-    for (; r < (int)inorder.size(); r++) {
-        if (inorder[r] == levelorder[0]) {
-            break;
-        }
-    }
-
-    vector<int> left_in = split_inord(inorder, 0, r);
-    vector<int> left_lvl = split_level(levelorder, left_in);
-    root->left = createTreeFromInAndLevel(left_in, left_lvl);
-
-    vector<int> right_in = split_inord(inorder, r + 1, (int)inorder.size());
-    vector<int> right_lvl = split_level(levelorder, right_in);
-    root->right = createTreeFromInAndLevel(right_in, right_lvl);
-
-    return root;
 }
-vector<int> split_inord(const vector<int> &inorder, int l, int r){
-    vector<int> result;
-    while(l<r){
-        result.push_back(inorder[l++]);
-    }
-    return result;
-
-}
-vector<int> split_level(const vector<int> &levelorder, const vector<int> &inorder){
-    // Create a set from inorder for O(1) lookup
-    unordered_set<int> inorderSet(inorder.begin(), inorder.end());
-    vector<int> result;
-    
-    // Iterate through levelorder and keep elements that exist in inorder
-    // This preserves the relative order from levelorder
-    for(int i = 1; i < levelorder.size(); i++){
-        if(inorderSet.find(levelorder[i]) != inorderSet.end()){
-            result.push_back(levelorder[i]);
-        }
-    }
-    return result;
-}
-
 
 
 /*
