@@ -197,7 +197,6 @@ public class HuffmanCoding {
      * Unpacks a byte array into a string of '0' and '1', up to nBits.
      */
     public static String unpackBits(byte[] data, int nBits) {
-        // TODO: Implement bit unpacking utility.
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < nBits; i++) {
             int byteIndex = i / 8;
