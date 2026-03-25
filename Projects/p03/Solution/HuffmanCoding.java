@@ -55,7 +55,8 @@ public class HuffmanCoding {
             return;
         }
         if (node.isLeaf()) {
-            this.encodingMap.put(node.character, code);
+            // Special-case single-character trees: Huffman code must be at least one bit.
+            this.encodingMap.put(node.character, code.isEmpty() ? "0" : code);
             return;
         }
         generateEncodingMapHelper(node.left, code + "0");
@@ -86,19 +87,22 @@ public class HuffmanCoding {
         byte[] B_message=packBits(message.toString());
 
         try(FileOutputStream fos=new FileOutputStream(outputFile)){
-            //write header
+            //write header (format matches test expectations)
             fos.write(encodingMap.size());
-            fos.write('\n');
-            for(Character key: encodingMap.keySet()){
+            // Write header entries without ':' or newlines
+            List<Character> sortedKeys = new ArrayList<>(encodingMap.keySet());
+            Collections.sort(sortedKeys);
+            for(Character key: sortedKeys){
                 StringBuilder value=new StringBuilder(encodingMap.get(key));
                 byte size= (byte) value.length();
                 int pad=(8-(value.length()%8))%8;
                 value.append("0".repeat(pad));
                 byte[] code=packBits(value.toString());
-                fos.write(key); fos.write(':'); fos.write(size);
-                fos.write(code); fos.write('\n');
+                fos.write(key); 
+                fos.write(size);
+                fos.write(code);
             }
-            fos.write(padding); fos.write('\n');
+            fos.write(padding);
             fos.write(B_message);
         }        
     }
@@ -111,7 +115,47 @@ public class HuffmanCoding {
      * Decodes the binary file and writes the decoded text to outputFile.
      */
     public void decodeFile(String encodedFile, String outputFile) throws IOException {
-        // TODO: Implement decoding from the binary file format.
+        try (FileInputStream fis = new FileInputStream(encodedFile);
+             FileWriter writer = new FileWriter(outputFile)) {
+            
+            // Read map size
+            int mapSize = fis.read();
+            
+            // Read encoding map entries and build reverse map
+            Map<String, Character> reverseMap = new HashMap<>();
+            for (int i = 0; i < mapSize; i++) {
+                char ch = (char) (fis.read() & 0xFF); // character
+                int codeLength = fis.read(); // code length in bits
+                
+                int numBytes = (codeLength + 7) / 8;
+                byte[] codeBytes = new byte[numBytes];
+                fis.read(codeBytes);
+                
+                String bits = unpackBits(codeBytes, codeLength);
+                reverseMap.put(bits, ch);
+            }
+            
+            // Read padding
+            int padding = fis.read();
+            
+            // Read all remaining data
+            byte[] data = fis.readAllBytes();
+            
+            // Unpack to bit string (excluding padding bits)
+            int totalBits = data.length * 8 - padding;
+            String bitString = unpackBits(data, totalBits);
+            
+            // Decode using reverse map
+            StringBuilder currentCode = new StringBuilder();
+            for (int i = 0; i < bitString.length(); i++) {
+                currentCode.append(bitString.charAt(i));
+                String code = currentCode.toString();
+                if (reverseMap.containsKey(code)) {
+                    writer.write(reverseMap.get(code));
+                    currentCode.setLength(0);
+                }
+            }
+        }
     }
 
     /**
@@ -154,7 +198,14 @@ public class HuffmanCoding {
      */
     public static String unpackBits(byte[] data, int nBits) {
         // TODO: Implement bit unpacking utility.
-        return null;
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < nBits; i++) {
+            int byteIndex = i / 8;
+            int bitIndex = 7 - (i % 8);
+            int bit = (data[byteIndex] >> bitIndex) & 1;
+            result.append(bit == 1 ? '1' : '0');
+        }
+        return result.toString();
     }
 
     /**
@@ -162,13 +213,32 @@ public class HuffmanCoding {
      * Reads only the data section (after header + padding byte).
      */
     public static void printBinaryFileAsBits(String encodedFile) throws IOException {
-        // TODO: Implement debug print of the binary data in the file.
+        try (FileInputStream fis = new FileInputStream(encodedFile)) {
+            // Skip header
+            int mapSize = fis.read();
+            for (int i = 0; i < mapSize; i++) {
+                fis.read(); // char
+                int len = fis.read();
+                int bytesNeeded = (len + 7) / 8;
+                for (int j = 0; j < bytesNeeded; j++) fis.read();
+            }
+            int padding = fis.read();
+            
+            // Read and print data bits
+            byte[] data = fis.readAllBytes();
+            int totalBits = data.length * 8 - padding;
+            System.out.println(unpackBits(data, totalBits));
+        }
     }
 
     /**
      * Debug utility: Print the encoding map.
      */
     public void printEncodingMap() {
-        // TODO: Print the encoding map for debugging/validation.
+        List<Character> sortedKeys = new ArrayList<>(encodingMap.keySet());
+        Collections.sort(sortedKeys);
+        for (char ch : sortedKeys) {
+            System.out.println("'" + ch + "' -> " + encodingMap.get(ch));
+        }
     }
 }
