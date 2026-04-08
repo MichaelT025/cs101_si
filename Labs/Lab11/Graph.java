@@ -26,6 +26,10 @@ public class Graph {
         return edges;
     }
 
+    public int getNumVertices() {
+        return numVertices;
+    }
+
     public List<Edge> getAdjEdges(int vertex) {
         return adjList.get(vertex);
     }
