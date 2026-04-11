@@ -17,6 +17,19 @@ class Country{
    Country(char c){
       this->name= c;
    }
+   char getName(){
+      return this->name;
+   }
+   void addNeighhbor(Country* a){
+      for (Country* n : neighbors) //Check for duplicates
+         if (n == a) return;
+      neighbors.push_back(a);
+   }
+   ~Country(){
+      for (Country* n : neighbors) {
+         delete n;
+      }
+   }
 };
 
 vector<Country*> parseMap(string input){
@@ -26,22 +39,41 @@ vector<Country*> parseMap(string input){
     return {};
    }
    unordered_map<char, Country*> chartoCountry;
-   Country* curr=nullptr;
-   char c;
-   while (file.get(c)) {
-      if (c != '~' && c != '\n' && chartoCountry.find(c)==chartoCountry.end()){
-         curr= new Country(c);
-         chartoCountry[c]= curr;
-      }
-   }
-   file.close();
-   file.open(input);
    vector<Country*> adj_list;
-   for(auto it=chartoCountry.begin(); it!=chartoCountry.end();it++){
+   string row, prev_row;
 
+   while (getline(file, row)) {
+      for (int col = 0; col < (int)row.size(); col++) {
+         char c = row[col];
+         if (c == '~') continue;
+
+         if (chartoCountry.find(c) == chartoCountry.end()) {
+            chartoCountry[c] = new Country(c);
+            adj_list.push_back(chartoCountry[c]);
+         }
+
+         // horizontal neighbor to the right
+         if (col + 1 < (int)row.size() && row[col+1] != '~' && row[col+1] != c) {
+            char r = row[col+1];
+            if (chartoCountry.find(r) == chartoCountry.end()) {
+               chartoCountry[r] = new Country(r);
+               adj_list.push_back(chartoCountry[r]);
+            }
+            chartoCountry[c]->addNeighhbor(chartoCountry[r]);
+            chartoCountry[r]->addNeighhbor(chartoCountry[c]);
+         }
+
+         // vertical neighbor above
+         if (!prev_row.empty() && prev_row[col] != '~' && prev_row[col] != c) {
+            char u = prev_row[col];
+            chartoCountry[c]->addNeighhbor(chartoCountry[u]);
+            chartoCountry[u]->addNeighhbor(chartoCountry[c]);
+         }
+      }
+      prev_row = row;
    }
 
-   return {};
+   return adj_list;
 }
 
 string colormap(string input){
