@@ -20,7 +20,7 @@ public class BinaryEncoderDecoderT {
     public static void encodeStringToBinaryFile(String message, String filename) throws IOException {
         // TODO: Implement encoding logic as described in the assignment instructions
         throw new UnsupportedOperationException("Not implemented yet.");
-        byte[] output = new byte[1];//1 isn't right!
+        //byte[] output = new byte[1];//1 isn't right!
         //TODO: ()
         try (FileOutputStream fos = new FileOutputStream(filename)) {
             fos.write(output);

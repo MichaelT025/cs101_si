@@ -32,7 +32,6 @@ public class MSTAlgorithms{
             } else {
                 continue;
             }
-
             mstEdges.add(edge);
             visited.add(nextVertex);
 
