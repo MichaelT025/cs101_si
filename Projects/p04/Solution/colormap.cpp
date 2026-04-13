@@ -1,11 +1,13 @@
 #include <iostream>
 #include <map>
+#include <queue>
 #include <string>
 #include <sstream>
 #include <vector>
 #include <fstream>
 #include <unordered_map>
 #include "colormap.h"
+#include <unordered_set>
 
 using namespace std;
 
@@ -16,19 +18,28 @@ class Country{
    public:
    Country(char c){
       this->name= c;
+      this->color = 0;
    }
    char getName(){
       return this->name;
+   }
+   int setColor(int c){
+      this->color = c;
+      return this->color;
+   }
+   int getColor(){
+      return this->color;
+   }
+   vector<Country*> getNeighbors(){
+      return this->neighbors;
    }
    void addNeighhbor(Country* a){
       for (Country* n : neighbors) //Check for duplicates
          if (n == a) return;
       neighbors.push_back(a);
    }
-   ~Country(){
-      for (Country* n : neighbors) {
-         delete n;
-      }
+   int neighborsCount(){
+      return this->neighbors.size();
    }
 };
 
@@ -55,6 +66,7 @@ vector<Country*> parseMap(string input){
          // horizontal neighbor to the right
          if (col + 1 < (int)row.size() && row[col+1] != '~' && row[col+1] != c) {
             char r = row[col+1];
+            
             if (chartoCountry.find(r) == chartoCountry.end()) {
                chartoCountry[r] = new Country(r);
                adj_list.push_back(chartoCountry[r]);
@@ -76,7 +88,44 @@ vector<Country*> parseMap(string input){
    return adj_list;
 }
 
+bool compareCountry(Country* a, Country* b){
+   return a->neighborsCount() < b->neighborsCount();
+}
+
 string colormap(string input){
    vector<Country*> countries = parseMap(input);
-   return "TODO";
+   priority_queue<Country*, vector<Country*>, decltype(&compareCountry)> maxHeap(compareCountry);
+   for(Country* c: countries)
+      maxHeap.push(c);
+
+   
+   vector<vector<char>> colors(5);
+   while(!maxHeap.empty()){
+      Country* curr= maxHeap.top(); maxHeap.pop();
+      bool used[5]={false};
+      for(Country* n: curr->getNeighbors()){
+         int currcolor=n->getColor();
+         if(currcolor!=0) used[currcolor]=true;
+      }
+      for(int c=1;c<5;c++){
+         if(!used[c]){
+            curr->setColor(c);
+            break;
+         }
+      }
+      colors[curr->getColor()].push_back(curr->getName());
+   }
+
+   string result = "";
+   for(int i=1;i<5;i++){
+      result+="Color "+to_string(i)+": ";
+      for(char c: colors[i]){
+         result+=string(1,c)+", ";
+      }
+      if (!colors[i].empty()) {
+         result = result.substr(0, result.length() - 2);
+      }
+      result+="\n";
+   }
+   return result;
 }
