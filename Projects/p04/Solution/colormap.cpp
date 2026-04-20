@@ -1,13 +1,10 @@
 #include <iostream>
-#include <map>
-#include <queue>
 #include <string>
-#include <sstream>
 #include <vector>
 #include <fstream>
 #include <unordered_map>
 #include "colormap.h"
-#include <unordered_set>
+#include <algorithm>
 
 using namespace std;
 
@@ -89,31 +86,44 @@ vector<Country*> parseMap(string input){
 }
 
 bool compareCountry(Country* a, Country* b){
-   return a->neighborsCount() < b->neighborsCount();
+   return a->neighborsCount() > b->neighborsCount();
 }
 
+bool solve(vector<Country*>& countries, int idx){
+   if(idx==countries.size()) return true;
+   bool used[5]={false};
+   Country* curr=countries[idx];
+
+   // Mark any colors already used by neighboring countries.
+   for(auto country: curr->getNeighbors()){
+      used[country->getColor()]=true;
+   }
+
+   // Try each valid color for the current country.
+   for(int c=1; c<5; c++){
+      if(!used[c]){
+         curr->setColor(c);
+
+         // If the rest of the countries can be colored, we are done.
+         if(solve(countries, idx+1)) return true;
+
+         // Otherwise undo this choice and try the next color.
+         curr->setColor(0);
+      }
+   }
+
+   // No color worked for this country with the current earlier choices.
+   return false;
+}
 string colormap(string input){
    vector<Country*> countries = parseMap(input);
-   priority_queue<Country*, vector<Country*>, decltype(&compareCountry)> maxHeap(compareCountry);
-   for(Country* c: countries)
-      maxHeap.push(c);
+   sort(countries.begin(), countries.end(), compareCountry);
 
-   
+   solve(countries, 0);
+
    vector<vector<char>> colors(5);
-   while(!maxHeap.empty()){
-      Country* curr= maxHeap.top(); maxHeap.pop();
-      bool used[5]={false};
-      for(Country* n: curr->getNeighbors()){
-         int currcolor=n->getColor();
-         if(currcolor!=0) used[currcolor]=true;
-      }
-      for(int c=1;c<5;c++){
-         if(!used[c]){
-            curr->setColor(c);
-            break;
-         }
-      }
-      colors[curr->getColor()].push_back(curr->getName());
+   for(Country* c: countries){
+      colors[c->getColor()].push_back(c->getName());
    }
 
    string result = "";
@@ -122,9 +132,8 @@ string colormap(string input){
       for(char c: colors[i]){
          result+=string(1,c)+", ";
       }
-      if (!colors[i].empty()) {
-         result = result.substr(0, result.length() - 2);
-      }
+      result.pop_back();
+      result.pop_back();
       result+="\n";
    }
    return result;
